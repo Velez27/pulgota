@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#FBF6F0">
+<title>Para mi Pulgota 🐜💛</title>
+<meta name="description" content="Una cartita para Pulgota">
+
+<!-- Preconnect para carga rápida de fuentes -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Fondo de partículas suaves (se dibuja con canvas, ligero) -->
+<canvas id="petals" aria-hidden="true"></canvas>
+
+<main id="app">
+
+  <!-- ESCENA 1: Bienvenida -->
+  <section class="scene scene--welcome" id="scene-welcome" aria-label="Bienvenida">
+    <div class="welcome__stamp" aria-hidden="true">
+      <svg viewBox="0 0 64 64" width="46" height="46">
+        <path d="M32 50s-18-11.2-18-25.1C14 16.5 19.8 11 27 11c2.9 0 5.6 1.4 5 5.6C33.4 12.4 36.1 11 39 11c7.2 0 13 5.5 13 13.9C52 38.8 32 50 32 50z"
+          fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <p class="welcome__eyebrow">para la enfermera que cuida hasta de mí</p>
+    <h1 class="welcome__title" id="welcomeTitle" aria-live="polite"></h1>
+    <p class="welcome__subtitle">— con todo mi cariño, tu persona —</p>
+
+    <button class="btn btn--ghost" id="btnToEnvelope" type="button">
+      sigue leyendo
+    </button>
+  </section>
+
+  <!-- ESCENA 2: Sobre -->
+  <section class="scene scene--envelope" id="scene-envelope" aria-label="Sobre con carta" hidden>
+    <p class="envelope__hint">tienes algo esperando por abrir</p>
+
+    <button class="envelope" id="envelopeBtn" type="button" aria-label="Abrir el sobre">
+      <span class="envelope__glow" aria-hidden="true"></span>
+      <span class="envelope__body">
+        <span class="envelope__flap"></span>
+        <span class="envelope__letter">
+          <span class="envelope__seal">💌</span>
+        </span>
+        <span class="envelope__front"></span>
+      </span>
+    </button>
+
+    <p class="envelope__tap">toca el sobre</p>
+  </section>
+
+  <!-- ESCENA 3: Galería de fotos y frases -->
+  <section class="scene scene--gallery" id="scene-gallery" aria-label="Galería de recuerdos" hidden>
+
+    <div class="gallery__track" id="galleryTrack">
+      <!-- Los slides se generan por JS a partir de PHOTO_DATA en script.js -->
+    </div>
+
+    <div class="gallery__controls">
+      <button class="gallery__dot" id="prevBtn" type="button" aria-label="Anterior">‹</button>
+      <div class="gallery__dots" id="galleryDots" role="tablist" aria-label="Progreso de fotos"></div>
+      <button class="gallery__dot" id="nextBtn" type="button" aria-label="Siguiente">›</button>
+    </div>
+  </section>
+
+  <!-- ESCENA 4: Despedida final -->
+  <section class="scene scene--farewell" id="scene-farewell" aria-label="Mensaje final" hidden>
+    <div class="farewell__frame">
+      <img class="farewell__photo" id="farewellPhoto" src="images/foto5.jpg" alt="Nuestra última foto" loading="lazy"
+        onerror="this.src='images/placeholder.svg'">
+    </div>
+    <p class="farewell__quote" id="farewellQuote"></p>
+    <p class="farewell__sign">gracias por existir, Pulgota.</p>
+    <button class="btn btn--ghost" id="btnReplay" type="button">volver a leerla</button>
+  </section>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
