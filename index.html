@@ -21,7 +21,7 @@
 
 <main id="app">
 
-  <!-- ESCENA 1: Bienvenida -->
+  <!-- ESCENA 1: Bienvenida + Sobre -->
   <section class="scene scene--welcome" id="scene-welcome" aria-label="Bienvenida">
     <div class="welcome__stamp" aria-hidden="true">
       <svg viewBox="0 0 64 64" width="46" height="46">
@@ -32,32 +32,31 @@
 
     <p class="welcome__eyebrow">para la enfermera que cuida hasta de mí</p>
     <h1 class="welcome__title" id="welcomeTitle" aria-live="polite"></h1>
-    <p class="welcome__subtitle">— con todo mi cariño, tu persona —</p>
+    <p class="welcome__subtitle">— con todo mi cariño, para ti 💕—</p>
 
-    <button class="btn btn--ghost" id="btnToEnvelope" type="button">
-      sigue leyendo
-    </button>
-  </section>
-
-  <!-- ESCENA 2: Sobre -->
-  <section class="scene scene--envelope" id="scene-envelope" aria-label="Sobre con carta" hidden>
-    <p class="envelope__hint">tienes algo esperando por abrir</p>
-
-    <button class="envelope" id="envelopeBtn" type="button" aria-label="Abrir el sobre">
-      <span class="envelope__glow" aria-hidden="true"></span>
-      <span class="envelope__body">
-        <span class="envelope__flap"></span>
-        <span class="envelope__letter">
-          <span class="envelope__seal">💌</span>
+    <div class="envelope-wrap" id="envelopeWrap">
+      <button class="envelope" id="envelopeBtn" type="button" aria-label="Abrir el sobre">
+        <span class="envelope__glow" aria-hidden="true"></span>
+        <span class="envelope__ribbon" aria-hidden="true"></span>
+        <span class="envelope__body">
+          <span class="envelope__flap">
+            <span class="envelope__flap-seal">💛</span>
+          </span>
+          <span class="envelope__letter">
+            <span class="envelope__seal">💌</span>
+          </span>
+          <span class="envelope__front"></span>
         </span>
-        <span class="envelope__front"></span>
-      </span>
-    </button>
+      </button>
 
-    <p class="envelope__tap">toca el sobre</p>
+      <p class="envelope__tap">
+        <span class="envelope__tap-hand" aria-hidden="true">👆</span>
+        toca aquí
+      </p>
+    </div>
   </section>
 
-  <!-- ESCENA 3: Galería de fotos y frases -->
+  <!-- ESCENA 2: Galería de fotos y frases -->
   <section class="scene scene--gallery" id="scene-gallery" aria-label="Galería de recuerdos" hidden>
 
     <div class="gallery__track" id="galleryTrack">
@@ -71,14 +70,13 @@
     </div>
   </section>
 
-  <!-- ESCENA 4: Despedida final -->
+  <!-- ESCENA 3: Despedida final -->
   <section class="scene scene--farewell" id="scene-farewell" aria-label="Mensaje final" hidden>
     <div class="farewell__frame">
-      <img class="farewell__photo" id="farewellPhoto" src="images/foto5.jpg" alt="Nuestra última foto" loading="lazy"
-        onerror="this.src='images/placeholder.svg'">
+      <img class="farewell__photo" id="farewellPhoto" src="images/placeholder.svg" alt="Nuestra última foto" loading="lazy">
     </div>
     <p class="farewell__quote" id="farewellQuote"></p>
-    <p class="farewell__sign">gracias por existir, Pulgota.</p>
+    <p class="farewell__sign">gracias por existir, Pulgota. 🫶💕</p>
     <button class="btn btn--ghost" id="btnReplay" type="button">volver a leerla</button>
   </section>
 

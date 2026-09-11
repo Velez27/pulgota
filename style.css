@@ -103,6 +103,15 @@ body::before{
   .scene{ padding-top: 3vh; padding-bottom: 3vh; }
   .welcome__title{ min-height: 0; }
   .btn{ margin-top: 1.4rem; }
+  .welcome__stamp{ display: none; }
+  .envelope-wrap{ margin-top: 1.2rem; }
+  .envelope{ width: min(60vw, 30vh, 220px); }
+}
+
+/* Alto disponible normal pero corto en ancho: da algo más de aire */
+@media (max-height: 700px){
+  .welcome__eyebrow{ margin-bottom: .3rem; }
+  .welcome__title{ min-height: clamp(4.5rem, 16vw, 8rem); }
 }
 
 .scene[hidden]{ display: none !important; }
@@ -202,21 +211,31 @@ body::before{
   to{ opacity: 1; transform: translateY(0); }
 }
 
-#btnToEnvelope{
+/* ============================================================
+   SOBRE — ahora vive dentro de la escena de bienvenida
+   ============================================================ */
+.envelope-wrap{
+  margin-top: 2.6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   opacity: 0;
-  animation: fadeUp .8s var(--ease) forwards;
-  animation-delay: 3.1s;
+  transform: translateY(26px) scale(.86);
+  pointer-events: none;
+  transition: opacity .8s var(--ease), transform .8s var(--ease);
 }
 
-/* ============================================================
-   SCENE 2 — ENVELOPE
-   ============================================================ */
-.envelope__hint{
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 1.2rem;
-  color: var(--ink-soft);
-  margin: 0 0 2.6rem;
+.envelope-wrap.is-visible{
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  animation: envelopeDropIn .9s var(--ease);
+}
+
+@keyframes envelopeDropIn{
+  0%{ transform: translateY(-16px) scale(.9); }
+  55%{ transform: translateY(6px) scale(1.04); }
+  100%{ transform: translateY(0) scale(1); }
 }
 
 .envelope{
@@ -228,19 +247,64 @@ body::before{
   padding: 0;
   cursor: pointer;
   perspective: 900px;
+  animation: envelopeFloat 3.4s ease-in-out infinite;
+}
+
+/* Suave flotación continua para que se note "vivo" y se quiera tocar */
+@keyframes envelopeFloat{
+  0%, 100%{ transform: translateY(0) rotate(0deg); }
+  50%{ transform: translateY(-7px) rotate(-1deg); }
+}
+
+.envelope:hover,
+.envelope:focus-visible{
+  animation-play-state: paused;
+  transform: translateY(-4px) scale(1.03);
+}
+
+.envelope--open{
+  animation: none;
 }
 
 .envelope__glow{
   position: absolute;
-  inset: -20%;
+  inset: -30%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(201,161,90,.35), transparent 65%);
-  animation: glowPulse 2.4s ease-in-out infinite;
+  background: radial-gradient(circle, rgba(201,161,90,.45), rgba(217,166,166,.25) 45%, transparent 70%);
+  animation: glowPulse 2s ease-in-out infinite;
   z-index: 0;
 }
 @keyframes glowPulse{
-  0%, 100%{ opacity: .4; transform: scale(.94); }
-  50%{ opacity: .85; transform: scale(1.05); }
+  0%, 100%{ opacity: .5; transform: scale(.92); }
+  50%{ opacity: 1; transform: scale(1.1); }
+}
+
+.envelope__ribbon{
+  position: absolute;
+  left: 50%;
+  top: -14px;
+  width: 34px;
+  height: 34px;
+  background: var(--gold);
+  border-radius: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 4px 10px -3px rgba(43,34,48,.4);
+  z-index: 3;
+  display: block;
+}
+.envelope__ribbon::after{
+  content: "✨";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .95rem;
+  animation: sparkleSpin 3.2s linear infinite;
+}
+@keyframes sparkleSpin{
+  from{ transform: rotate(0deg); }
+  to{ transform: rotate(360deg); }
 }
 
 .envelope__body{
@@ -254,9 +318,9 @@ body::before{
 .envelope__front{
   position: absolute;
   inset: 0;
-  background: var(--rose);
+  background: linear-gradient(155deg, var(--rose) 0%, var(--rose-deep) 100%);
   border-radius: 6px;
-  box-shadow: 0 18px 34px -14px rgba(92,58,78,.45);
+  box-shadow: 0 20px 38px -14px rgba(92,58,78,.5);
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
 }
 .envelope__front::before{
@@ -296,6 +360,20 @@ body::before{
   transition: transform .7s var(--ease);
   z-index: 2;
   box-shadow: 0 2px 4px rgba(43,34,48,.12);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 18%;
+}
+
+.envelope__flap-seal{
+  font-size: 1.1rem;
+  filter: drop-shadow(0 2px 3px rgba(43,34,48,.25));
+  animation: sealPulse 1.8s ease-in-out infinite;
+}
+@keyframes sealPulse{
+  0%, 100%{ transform: scale(1); }
+  50%{ transform: scale(1.18); }
 }
 
 .envelope--open .envelope__flap{
@@ -304,12 +382,32 @@ body::before{
 .envelope--open .envelope__letter{
   transform: translateY(-58%);
 }
+.envelope--open .envelope__ribbon,
+.envelope--open .envelope__glow{
+  opacity: 0;
+  transition: opacity .3s ease;
+}
 
 .envelope__tap{
-  margin-top: 1.8rem;
-  font-size: .78rem;
-  letter-spacing: .04em;
-  color: var(--ink-soft);
+  margin-top: 1.4rem;
+  font-size: .82rem;
+  font-weight: 600;
+  letter-spacing: .05em;
+  color: var(--plum);
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  transition: opacity .3s ease;
+}
+
+.envelope__tap-hand{
+  font-size: 1rem;
+  display: inline-block;
+  animation: tapBounce 1.4s ease-in-out infinite;
+}
+@keyframes tapBounce{
+  0%, 100%{ transform: translateY(0) rotate(0deg); }
+  50%{ transform: translateY(4px) rotate(-8deg); }
 }
 
 /* ============================================================

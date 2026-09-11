@@ -3,35 +3,35 @@
    ========================================================== */
 
 // Mensaje de bienvenida (se escribe con efecto máquina de escribir)
-const WELCOME_MESSAGE = "Para mi Pulgota,\nla enfermera que también me cuida a mí.";
+const WELCOME_MESSAGE = "Para mi Pulgota,\nla super pulga enfermera que también me cuida a mí.";
 
 // Las 5 fotos + frase. Cambia solo el texto; los nombres de archivo
 // ya están listos para cuando subas tus fotos a la carpeta /images.
 const PHOTO_DATA = [
   {
-    src: "images/foto1.jpg",
-    quote: "Desde que llegaste, hasta los días grises se sienten distintos."
+    src: "images/foto1.jpeg",
+    quote: "Desde que llegaste, hasta los días grises se sienten distintos. 💕"
   },
   {
-    src: "images/foto2.jpg",
-    quote: "Cuidas de todos en el hospital, y aún te queda ternura para mí."
+    src: "images/foto2.jpeg",
+    quote: "Cuidas de todos tus pacientes, y aún te queda ternura para mí. 💕"
   },
   {
-    src: "images/foto3.jpg",
-    quote: "Tu risa es mi lugar favorito en el mundo, pulgota."
+    src: "images/foto3.jpeg",
+    quote: "Verte feliz es mi pasatiempo favorito, pulgota. 💕"
   },
   {
-    src: "images/foto4.jpg",
-    quote: "Contigo hasta lo simple se vuelve el mejor recuerdo del día."
+    src: "images/foto4.jpeg",
+    quote: "Contigo hasta lo simple se vuelve el mejor recuerdo del día. 💕"
   },
   {
-    src: "images/foto5.jpg",
-    quote: "Y aunque pasen mil turnos y mil días, elijo quedarme aquí, contigo."
+    src: "images/foto5.jpeg",
+    quote: "Y aunque pasen mil turnos y mil días, elijo quedarme aquí, contigo. 💕"
   }
 ];
 
 // Mensaje final, debajo de la última foto
-const FAREWELL_MESSAGE = "Gracias por cada cuidado, cada risa y cada 'ya llegué'. Te amo, pulgota.";
+const FAREWELL_MESSAGE = "Gracias por cada cuidado, cada risa y cada 'ya llegué'. Te quiero mucho. 💕";
 
 
 /* ==========================================================
@@ -39,7 +39,6 @@ const FAREWELL_MESSAGE = "Gracias por cada cuidado, cada risa y cada 'ya llegué
    ========================================================== */
 const scenes = {
   welcome:  document.getElementById('scene-welcome'),
-  envelope: document.getElementById('scene-envelope'),
   gallery:  document.getElementById('scene-gallery'),
   farewell: document.getElementById('scene-farewell'),
 };
@@ -84,10 +83,8 @@ function typeWelcomeMessage(){
   let buffer = '';
 
   function step(){
-    if (lineIndex >= lines.length){
-      return;
-    }
     const line = lines[lineIndex];
+    const isLastLine = lineIndex === lines.length - 1;
 
     if (charIndex < line.length){
       buffer += line[charIndex];
@@ -95,26 +92,34 @@ function typeWelcomeMessage(){
       el.textContent = buffer;
       el.appendChild(cursor);
       window.setTimeout(step, 38 + Math.random() * 30);
-    } else if (lineIndex < lines.length - 1){
+    } else if (!isLastLine){
       buffer += '\n';
       lineIndex++;
       charIndex = 0;
       window.setTimeout(step, 260);
+    } else {
+      // Terminó de escribirse el mensaje: revela el sobre con su animación
+      window.setTimeout(revealEnvelope, 600);
     }
   }
   step();
 }
 
+function revealEnvelope(){
+  document.getElementById('envelopeWrap').classList.add('is-visible');
+}
+
 /* ==========================================================
    ESCENA 2 — Sobre
    ========================================================== */
+let envelopeOpened = false;
+
 function initEnvelope(){
   const btn = document.getElementById('envelopeBtn');
-  let opened = false;
 
   btn.addEventListener('click', () => {
-    if (opened) return;
-    opened = true;
+    if (envelopeOpened) return;
+    envelopeOpened = true;
 
     btn.classList.add('envelope--open');
     document.querySelector('.envelope__tap').style.opacity = '0';
@@ -122,7 +127,7 @@ function initEnvelope(){
     // Espera a que termine la animación de apertura antes de pasar a la galería
     window.setTimeout(() => {
       buildGallery();
-      goToScene('envelope', 'gallery');
+      goToScene('welcome', 'gallery');
     }, 1050);
   });
 }
@@ -204,16 +209,22 @@ let farewellStarted = false;
 
 function initFarewell(){
   document.getElementById('farewellQuote').textContent = FAREWELL_MESSAGE;
+  const farewellImg = document.getElementById('farewellPhoto');
+  farewellImg.src = "images/foto6.jpeg";
+  farewellImg.addEventListener('error', () => {
+    farewellImg.src = 'images/placeholder.svg';
+  }, { once: true });
 
   if (farewellStarted) return;
   farewellStarted = true;
 
   document.getElementById('btnReplay').addEventListener('click', () => {
-    // Reinicia la experiencia desde el sobre
+    // Reinicia la experiencia: vuelve a la bienvenida con el sobre cerrado
     document.getElementById('scene-farewell').hidden = true;
-    document.getElementById('scene-envelope').hidden = false;
+    document.getElementById('scene-welcome').hidden = false;
     document.getElementById('envelopeBtn').classList.remove('envelope--open');
     document.querySelector('.envelope__tap').style.opacity = '1';
+    envelopeOpened = false;
   });
 }
 
@@ -281,10 +292,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initPetals();
   typeWelcomeMessage();
   initEnvelope();
-
-  document.getElementById('btnToEnvelope').addEventListener('click', () => {
-    goToScene('welcome', 'envelope');
-  });
 
   document.getElementById('nextBtn').addEventListener('click', nextSlide);
   document.getElementById('prevBtn').addEventListener('click', prevSlide);
